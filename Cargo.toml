@@ -1,7 +1,13 @@
 [package]
-name = "transform_2"
-version = "0.1.0"
+name = "transform2"
+version = "0.1.1"
 edition = "2021"
+license = "MIT OR Apache-2.0"
+keywords = ["bevy", "math", "games"]
+categories = ["game-development"]
+repository = "https://github.com/ickshonpe/transform2"
+readme = "README.md"
+description = "2D transform for Bevy"
 
 [dependencies.bevy]
 version = "0.8"

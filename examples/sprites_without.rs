@@ -1,4 +1,9 @@
 use std::f32::consts::PI;
+
+use bevy::diagnostic::FrameTimeDiagnosticsPlugin;
+use bevy::diagnostic::LogDiagnosticsPlugin;
+use bevy::input::keyboard::KeyboardInput;
+use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy::sprite::Anchor;
 use transform2::Transform2;
@@ -23,9 +28,9 @@ fn setup(mut commands: Commands) {
                     anchor: Anchor::Center,
                     ..Default::default()
                 },
+                transform: Transform::from_translation(inner_translation.extend(1.0)),
                 ..Default::default()
             })
-            .insert(Transform2::from_translation(inner_translation).with_depth(1.0))
             .id();
         commands
             .spawn_bundle(SpriteBundle {
@@ -35,9 +40,9 @@ fn setup(mut commands: Commands) {
                     anchor: Anchor::BottomRight,
                     ..Default::default()
                 },
+                transform: Transform::from_rotation(Quat::from_rotation_z(-rotation)),
                 ..Default::default()
             })
-            .insert(Transform2::from_rotation(rotation))
             .insert(OuterMarker)
             .add_child(inner);
     }
@@ -46,23 +51,25 @@ fn setup(mut commands: Commands) {
 fn update(
     time: Res<Time>,
     keys: Res<Input<KeyCode>>,
-    mut transform2s: Query<&mut Transform2, With<OuterMarker>>,
+    mut transform2s: Query<&mut Transform, With<OuterMarker>>,
 ) {
     let a = PI * time.delta_seconds();
-    transform2s.for_each_mut(|mut tf2| {
+    transform2s.for_each_mut(|mut tf| {
         if keys.pressed(KeyCode::Z) {
-            tf2.rotation -= a;
+            tf.rotate_z(-a);
         }
         if keys.pressed(KeyCode::X) {
-            tf2.rotation += a;
+            tf.rotate_z(a);
         }
 
         if keys.pressed(KeyCode::S) {
-            tf2.scale += 3.0 * time.delta_seconds();
+            tf.scale.x += 3.0 * time.delta_seconds();
+            tf.scale.y += 3.0 * time.delta_seconds();
         }
 
         if keys.pressed(KeyCode::A) {
-            tf2.scale -= 3.0 * time.delta_seconds();
+            tf.scale.x -= 3.0 * time.delta_seconds();
+            tf.scale.y -= 3.0 * time.delta_seconds();
         }
     });
 }
@@ -70,7 +77,7 @@ fn update(
 fn main() {
     App::new()
         .insert_resource(ClearColor(Color::BLACK))
-        .add_plugin(Transform2Plugin)
+        .add_plugins(DefaultPlugins)
         .add_startup_system(setup)
         .add_system(update)
         .run();
