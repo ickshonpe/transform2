@@ -67,6 +67,15 @@ impl Transform2 {
 
     #[inline]
     #[must_use]
+    pub const fn from_depth(depth: f32) -> Self {
+        Self {
+            depth,
+            ..Self::IDENTITY
+        }
+    }
+
+    #[inline]
+    #[must_use]
     pub const fn with_translation(mut self, translation: Vec2) -> Self {
         self.translation = translation;
         self
