@@ -176,7 +176,7 @@ impl From<&GlobalTransform> for GlobalTransform2 {
         GlobalTransform2(Transform2 {
             translation: translation.xy(),
             depth: translation.z,
-            rotation: -rotation.to_euler(EulerRot::ZYX).0,
+            rotation: rotation.to_euler(EulerRot::ZYX).0,
             scale: scale.xy(),
         })
     }
