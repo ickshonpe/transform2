@@ -128,7 +128,7 @@ impl From<&Transform2> for Transform {
     fn from(transform_2: &Transform2) -> Self {
         Self {
             translation: transform_2.translation.extend(transform_2.depth),
-            rotation: Quat::from_rotation_z(-transform_2.rotation),
+            rotation: Quat::from_rotation_z(transform_2.rotation),
             scale: transform_2.scale.extend(1.0),
         }
     }
